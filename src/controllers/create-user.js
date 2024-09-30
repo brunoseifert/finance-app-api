@@ -1,5 +1,6 @@
 import validator from 'validator'
 import { CreateUserUseCase } from '../use-cases/create-user.js'
+import { badRequest, created, serverError } from './helpers.js'
 
 export class CreateUserController {
     async execute(httpRequest) {
@@ -16,12 +17,9 @@ export class CreateUserController {
 
             for (const field of requiredFields) {
                 if (!params[field] || params[field].trim().length === 0) {
-                    return {
-                        statusCode: 400,
-                        body: {
-                            errorMessage: `Missing param: ${field}`,
-                        },
-                    }
+                    return badRequest({
+                        errorMessage: `${field} is required`,
+                    })
                 }
             }
 
@@ -32,25 +30,19 @@ export class CreateUserController {
                 !/[!@#$%^&*()\-_+={}[\]|\\?<>.,;:]/.test(params.password)
 
             if (passwordValidation) {
-                return {
-                    statusCode: 400,
-                    body: {
-                        errorMessage:
-                            'Password must be between 6 and 20 characters and contain at least one special character',
-                    },
-                }
+                return badRequest({
+                    errorMessage:
+                        'Password must be between 6 and 20 characters and contain at least one special character',
+                })
             }
 
             // Validar email
             const emailValidation = validator.isEmail(params.email)
 
             if (!emailValidation) {
-                return {
-                    statusCode: 400,
-                    body: {
-                        errorMessage: 'Invalid email',
-                    },
-                }
+                return badRequest({
+                    errorMessage: 'Invalid email or email already exists',
+                })
             }
 
             // Chamar use case
@@ -58,19 +50,10 @@ export class CreateUserController {
             const createdUser = await createUserUseCase.execute(params)
 
             // Retornar resposta
-            return {
-                statusCode: 201,
-                body: createdUser,
-            }
+            return created(createdUser)
         } catch (error) {
             console.error('CreateUserController', error)
-            return {
-                statusCode: 500,
-                body: {
-                    errorMessage: 'Server error',
-                    details: error.message,
-                },
-            }
+            return serverError()
         }
     }
 }
