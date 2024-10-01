@@ -7,6 +7,6 @@ export class PostgresGetUserByIdRepository {
             [userId],
         )
 
-        return user.rows[0]
+        return user[0]
     }
 }
