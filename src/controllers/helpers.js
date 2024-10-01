@@ -11,11 +11,16 @@ export const created = (body) => ({
 export const serverError = () => ({
     statusCode: 500,
     body: {
-        errorMessage: 'Internal server error',
+        message: 'Internal server error',
     },
 })
 
 export const ok = (body) => ({
     statusCode: 200,
+    body,
+})
+
+export const notFound = (body) => ({
+    statusCode: 404,
     body,
 })
