@@ -25,3 +25,5 @@ export const checkPassowrdIsValid = (password) =>
     !/[!@#$%^&*()\-_+={}[\]|\\?<>.,;:]/.test(password)
 
 export const checkEmailIsValid = (email) => validator.isEmail(email)
+
+export const checkIdIsValid = (id) => validator.isUUID(id)
