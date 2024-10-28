@@ -7,6 +7,6 @@ export class PostgresDeleteUser {
             [userId],
         )
 
-        return deletedUser.rows[0]
+        return deletedUser[0]
     }
 }
