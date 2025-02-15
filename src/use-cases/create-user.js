@@ -5,6 +5,11 @@ import { PostgresGetUserByEmailRepository } from '../repositories/postgres/get-u
 import { EmailAlreadyInUseError } from '../error/user.js'
 
 export class CreateUserUseCase {
+    constructor() {
+        this.getUserByEmailRepository
+    }
+
+
     async execute(createUserParams) {
         // TODO: verificar se o email ja esta cadastrado
 

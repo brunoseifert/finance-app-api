@@ -26,7 +26,12 @@ app.patch('/api/users/:userId', async (request, response) => {
 })
 
 app.get('/api/users/:userId', async (request, response) => {
-    const getUserByIdController = new GetUserByIdController()
+
+    const getUserByIdRepository = new GetUserByIdRepository()
+
+    const getUserByIdUseCase = new GetUserByIdUseCase(getUserByIdRepository)
+
+    const getUserByIdController = new GetUserByIdController(getUserByIdUseCase)
 
     const { statusCode, body } = await getUserByIdController.execute(request)
 
